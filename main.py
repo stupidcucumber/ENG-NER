@@ -23,10 +23,10 @@ def parse_arguments() -> Namespace:
     )
 
     parser.add_argument(
-        "--sentence",
+        "--text",
         type=str,
         required=True,
-        help="Path to the .txt file containing text that needs to be parsed.",
+        help="Text that needs to be parsed.",
     )
 
     return parser.parse_args()
@@ -55,20 +55,26 @@ def gather_result(tokens: list[str], predictions: list[str]) -> str:
     return result
 
 
-def main(sentence: str, weights: Path | None) -> None:
+def main(text: str, weights: Path | None) -> None:
     print("Loading model...")
     crf_model: CRF = joblib.load(weights)
     print()
 
     print("Start inferencing...")
-    tokens = nltk.tokenize.word_tokenize(sentence)
-    predictions = crf_model.predict([tokens2features(tokens=tokens, window_size=2)])
+    tokens = []
+    predictions = []
+    for sentence in nltk.tokenize.sent_tokenize(text):
+        temp_tokens = nltk.tokenize.word_tokenize(sentence)
+        tokens.extend(temp_tokens)
+        predictions.extend(
+            crf_model.predict([tokens2features(tokens=temp_tokens, window_size=2)])[0]
+        )
     print()
 
     print_info()
 
     print("Inference result: \n")
-    print(gather_result(tokens=tokens, predictions=predictions[0]))
+    print(gather_result(tokens=tokens, predictions=predictions))
     print()
 
 
