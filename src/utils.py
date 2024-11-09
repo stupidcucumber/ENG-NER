@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import gdown
 import pyaml
 
 
@@ -51,3 +52,19 @@ def load_color_mapping(fpath: Path, obi: bool = False) -> dict[int, str]:
             result[f"I-{key}"] = value
 
     return result
+
+
+def download_default_weights() -> Path:
+    """Downloads default weights of the CRF model from the google drive.
+
+    Returns
+    -------
+    Path
+        Path to the default weights on a local machine.
+    """
+    url = "https://drive.google.com/uc?id=1ZNBjtGVFe2kHaPO2DfXLKNr7It00VMdN"
+    output = Path("default.joblib")
+    if not output.exists():
+        print("Downloading default model weights...")
+        gdown.download(url, output.as_posix())
+    return output

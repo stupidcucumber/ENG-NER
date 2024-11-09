@@ -7,7 +7,7 @@ from sklearn_crfsuite import CRF
 from termcolor import colored
 
 from src.features import tokens2features
-from src.utils import load_color_mapping
+from src.utils import download_default_weights, load_color_mapping
 
 nltk.download("punkt")
 
@@ -56,6 +56,9 @@ def gather_result(tokens: list[str], predictions: list[str]) -> str:
 
 
 def main(text: str, weights: Path | None) -> None:
+    if not weights:
+        weights = download_default_weights()
+
     print("Loading model...")
     crf_model: CRF = joblib.load(weights)
     print()

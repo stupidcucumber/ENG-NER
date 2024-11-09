@@ -5,3 +5,4 @@ numpy
 sklearn_crfsuite
 termcolor
 pyaml
+gdown
