@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
+import joblib
 from sklearn_crfsuite import CRF
 
 from src.data import DatasetNER
@@ -49,14 +50,13 @@ def main(
     saving_path: Path,
 ) -> None:
     saving_path.mkdir(exist_ok=True)
-    model_filename = f"crf_{algorithm}_{max_iterations}.model"
+    model_filename = f"crf_{algorithm}_{max_iterations}.joblib"
     ner_crf_algorithm = CRF(
         algorithm="lbfgs",
         all_possible_transitions=True,
         c1=0,
         c2=0,
         max_iterations=100,
-        model_filename=(saving_path / model_filename).as_posix(),
     )
 
     print("Loading train dataset...")
@@ -73,6 +73,8 @@ def main(
         "TEST ACCURACY RESULT: ",
         ner_crf_algorithm.score(test_dataset.features(), test_dataset.labels()),
     )
+
+    joblib.dump(ner_crf_algorithm, saving_path / model_filename)
 
 
 if __name__ == "__main__":

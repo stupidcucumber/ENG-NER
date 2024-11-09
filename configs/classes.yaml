@@ -1,0 +1,12 @@
+0:
+  name: "NON-ENTITY"
+  color: null
+1:
+  name: "LOCATION"
+  color: red
+2:
+  name: "PERSON"
+  color: blue
+4:
+  name: "MISC"
+  color: green
