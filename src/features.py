@@ -124,5 +124,20 @@ def numbers2labels(numbers: list[int]) -> list[str]:
     list[str]
         Named labels.
     """
+    result = []
+
     _map = {0: "NON-ENTITY", 1: "LOCATION", 2: "PERSON", 4: "MISC"}
-    return [_map[number] for number in numbers]
+
+    last_number = None
+    for number in numbers:
+        if number == 0:
+            last_number = None
+            result.append(_map[number])
+        else:
+            if last_number != number:
+                last_number = number
+                result.append(f"B-{_map[number]}")
+            else:
+                result.append(f"I-{_map[number]}")
+
+    return result
