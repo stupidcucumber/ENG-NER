@@ -61,9 +61,11 @@ def main(
 
     print("Loading train dataset...")
     train_dataset = DatasetNER(fpath=train_data)
+    print()
 
     print("Start training... Model will be saved to: ", saving_path / model_filename)
     ner_crf_algorithm.fit(train_dataset.features(), train_dataset.labels())
+    print()
 
     print("Loading test dataset...")
     test_dataset = DatasetNER(fpath=test_data)
