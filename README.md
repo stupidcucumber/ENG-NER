@@ -1,5 +1,11 @@
 # ENG-NER
-Repository for NER task in Deep Learning.
+Repository for NER. For this purpose I used WikiNER open-source dataset with three following classes:
+- Location (Country, Town, City, GPE)
+- Person
+- Misc (Organization, event, work of art, etc.)
+- Non-entity
+
+More info can be found in [the paper](https://core.ac.uk/download/pdf/82128816.pdf) and [huggingface website](https://huggingface.co/datasets/mnaguib/WikiNER).
 
 ## Installation
 Clone the repository:
