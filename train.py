@@ -2,7 +2,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
 import joblib
-from sklearn_crfsuite import CRF
+from sklearn_crfsuite import CRF, metrics
 
 from src.data import DatasetNER
 
@@ -69,11 +69,34 @@ def main(
 
     print("Loading test dataset...")
     test_dataset = DatasetNER(fpath=test_data)
+
+    y_pred = ner_crf_algorithm.predict(test_dataset.features())
+    y_true = test_dataset.labels()
+
+    print("\tACCURACY SCORE: ")
+    print(metrics.flat_accuracy_score(y_pred=y_pred, y_true=y_true))
+
+    print("\tF1 SCORE: ")
     print(
-        "TEST ACCURACY RESULT: ",
-        ner_crf_algorithm.score(test_dataset.features(), test_dataset.labels()),
+        metrics.flat_f1_score(
+            y_pred=y_pred,
+            y_true=y_true,
+            average="weighted",
+            labels=sorted(ner_crf_algorithm.classes_),
+        )
     )
 
+    print("\tCLASSIFICATION REPORT: ")
+    print(
+        metrics.flat_classification_report(
+            y_pred=y_pred,
+            y_true=y_true,
+            labels=sorted(ner_crf_algorithm.classes_),
+            digits=3,
+        )
+    )
+
+    print("Saving model...")
     joblib.dump(ner_crf_algorithm, saving_path / model_filename)
 
 
